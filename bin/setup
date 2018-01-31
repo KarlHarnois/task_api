@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 require 'pathname'
 require 'fileutils'
-include FileUtils
+
+include FileUtils # rubocop:disable Style/MixinUsage
 
 # path to your application root.
 APP_ROOT = Pathname.new File.expand_path('../../', __FILE__)
@@ -17,7 +18,6 @@ chdir APP_ROOT do
   puts '== Installing dependencies =='
   system! 'gem install bundler --conservative'
   system('bundle check') || system!('bundle install')
-
 
   # puts "\n== Copying sample files =="
   # unless File.exist?('config/database.yml')
