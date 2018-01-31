@@ -1,5 +1,11 @@
 class TasksController < ApplicationController
   def create
-    Task.create(name: params[:name])
+    Task.create(task_params)
+  end
+
+  private
+
+  def task_params
+    params.permit(:name)
   end
 end
