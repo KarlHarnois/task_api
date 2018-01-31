@@ -3,6 +3,7 @@ AllCops:
     - 'spec/*_helper.rb'
     - 'config/environments/*.rb'
     - 'config/initializers/*.rb'
+    - 'vendor/**/*'
     - db/schema.rb
   TargetRubyVersion: 2.4
 
