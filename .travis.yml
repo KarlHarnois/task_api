@@ -11,7 +11,7 @@ jobs:
   include:
     - stage: lint
       script:
-        - rubocop
+        - bundle exec rubocop
 
     - stage: test
       script:
