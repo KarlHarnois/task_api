@@ -2,11 +2,11 @@
 /.bundle
 /vendor/bundle
 
-# SQLite database.
+# SQLite database
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
-# Logfiles/Tempfiles.
+# Logfiles/Tempfiles
 /log/*
 /tmp/*
 !/log/.keep
