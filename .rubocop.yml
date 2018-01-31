@@ -1,0 +1,16 @@
+AllCops:
+  Exclude:
+    - 'spec/*_helper.rb'
+    - 'config/environments/*.rb'
+    - 'config/initializers/*.rb'
+    - db/schema.rb
+  TargetRubyVersion: 2.4
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
