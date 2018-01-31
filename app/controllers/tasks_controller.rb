@@ -1,6 +1,7 @@
 class TasksController < ApplicationController
   def create
-    Task.create(task_params)
+    task = Task.create(task_params)
+    render json: task, status: 201
   end
 
   private
