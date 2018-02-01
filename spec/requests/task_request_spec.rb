@@ -47,5 +47,9 @@ describe 'Tasks API', type: :request do
     it 'can update task names' do
       expect(task.reload.name).to eq 'SomeName'
     end
+
+    it 'returns the updated task' do
+      expect(body).to include('name' => 'SomeName')
+    end
   end
 end
