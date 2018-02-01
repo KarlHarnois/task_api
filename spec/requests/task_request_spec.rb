@@ -36,4 +36,16 @@ describe 'Tasks API', type: :request do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    let!(:task) { create :task }
+
+    before do
+      patch '/tasks/1', params: { name: 'SomeName' }
+    end
+
+    it 'can update task names' do
+      expect(task.reload.name).to eq 'SomeName'
+    end
+  end
 end

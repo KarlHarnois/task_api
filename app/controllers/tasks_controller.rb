@@ -8,6 +8,11 @@ class TasksController < ApplicationController
     render json: Task.all
   end
 
+  def update
+    task = Task.find(params[:id])
+    task.update_attributes(task_params)
+  end
+
   private
 
   def task_params
