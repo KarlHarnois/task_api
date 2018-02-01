@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe 'Tasks API', type: :request do
-  describe 'POST #create' do
-    let(:body) { JSON.parse(response.body) }
+  let(:body) { JSON.parse(response.body) }
 
+  describe 'POST #create' do
     before do
       post '/tasks', params: { name: 'SomeName' }
     end
@@ -18,6 +18,22 @@ describe 'Tasks API', type: :request do
 
     it 'has the correct status' do
       expect(response).to have_http_status(:created)
+    end
+  end
+
+  describe 'GET #index' do
+    let!(:tasks) { create_list :task, 3 }
+
+    before { get '/tasks' }
+
+    describe 'response body' do
+      it 'contains the correct amount of objects' do
+        expect(body.size).to eq 3
+      end
+
+      it 'contains tasks' do
+        expect(body).to all(include('name', 'id', 'created_at', 'updated_at'))
+      end
     end
   end
 end

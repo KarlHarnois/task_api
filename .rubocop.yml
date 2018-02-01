@@ -7,6 +7,10 @@ AllCops:
     - db/schema.rb
   TargetRubyVersion: 2.4
 
+Metric/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 
