@@ -4,6 +4,10 @@ class TasksController < ApplicationController
     render json: task, status: 201
   end
 
+  def index
+    render json: Task.all
+  end
+
   private
 
   def task_params
