@@ -16,7 +16,7 @@ describe 'Tasks API', type: :request do
       expect(body).to include('name' => 'SomeName', 'id' => 1)
     end
 
-    it 'has the correct status' do
+    it 'returns the correct status code' do
       expect(response).to have_http_status(:created)
     end
   end
@@ -39,9 +39,10 @@ describe 'Tasks API', type: :request do
 
   describe 'PATCH #update' do
     let!(:task) { create :task }
+    let(:params) { { name: 'SomeName' } }
 
     before do
-      patch '/tasks/1', params: { name: 'SomeName' }
+      patch '/tasks/1', params: params
     end
 
     it 'can update task names' do
@@ -50,6 +51,22 @@ describe 'Tasks API', type: :request do
 
     it 'returns the updated task' do
       expect(body).to include('name' => 'SomeName')
+    end
+
+    it 'returns the correct status code' do
+      expect(response).to have_http_status(200)
+    end
+
+    context 'when the task update fails' do
+      let(:params) { { name: nil } }
+
+      it 'returns an error' do
+        expect(body).to include('errors' => ["Name can't be blank"])
+      end
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status(422)
+      end
     end
   end
 end
