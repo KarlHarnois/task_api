@@ -1,10 +1,10 @@
 class TasksController < ApplicationController
   def create
-    task = Task.create(task_params)
-    if task.save
-      render json: task, status: 201
+    @task = Task.create(task_params)
+    if @task.save
+      render json: @task, status: 201
     else
-      render json: { errors: task.errors.full_messages }, status: 422
+      render json: errors, status: 422
     end
   end
 
@@ -13,11 +13,11 @@ class TasksController < ApplicationController
   end
 
   def update
-    task = Task.find(params[:id])
-    if task.update_attributes(task_params)
-      render json: task
+    @task = Task.find(params[:id])
+    if @task.update_attributes(task_params)
+      render json: @task
     else
-      render json: { errors: task.errors.full_messages }, status: 422
+      render json: errors, status: 422
     end
   end
 
@@ -25,5 +25,9 @@ class TasksController < ApplicationController
 
   def task_params
     params.permit(:name)
+  end
+
+  def errors
+    { errors: @task.errors.full_messages }
   end
 end
