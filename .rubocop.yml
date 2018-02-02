@@ -17,5 +17,8 @@ Style/FrozenStringLiteralComment:
 Style/Documentation:
   Enabled: false
 
+Style/AndOr:
+  Enabled: false
+
 Metrics/LineLength:
   Enabled: false

@@ -2,11 +2,10 @@ require 'rails_helper'
 
 describe 'Tasks API', type: :request do
   let(:body) { JSON.parse(response.body) }
+  let(:params) { { name: 'SomeName' } }
 
   describe 'POST #create' do
-    before do
-      post '/tasks', params: { name: 'SomeName' }
-    end
+    before { post '/tasks', params: params }
 
     it 'creates a new task' do
       expect(Task.last.name).to eq 'SomeName'
@@ -17,7 +16,19 @@ describe 'Tasks API', type: :request do
     end
 
     it 'returns the correct status code' do
-      expect(response).to have_http_status(:created)
+      expect(response).to have_http_status :created
+    end
+
+    context 'when task creation fails' do
+      let(:params) { { name: nil } }
+
+      it 'returns an error' do
+        expect(body).to include('errors' => ["Name can't be blank"])
+      end
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 422
+      end
     end
   end
 
@@ -39,11 +50,8 @@ describe 'Tasks API', type: :request do
 
   describe 'PATCH #update' do
     let!(:task) { create :task }
-    let(:params) { { name: 'SomeName' } }
 
-    before do
-      patch '/tasks/1', params: params
-    end
+    before { patch '/tasks/1', params: params }
 
     it 'can update task names' do
       expect(task.reload.name).to eq 'SomeName'
@@ -54,7 +62,7 @@ describe 'Tasks API', type: :request do
     end
 
     it 'returns the correct status code' do
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status 200
     end
 
     context 'when the task update fails' do
@@ -65,7 +73,7 @@ describe 'Tasks API', type: :request do
       end
 
       it 'returns the correct status code' do
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status 422
       end
     end
   end
