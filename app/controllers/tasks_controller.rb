@@ -21,15 +21,15 @@ class TasksController < ApplicationController
     params.permit(:name)
   end
 
-  def errors
-    { errors: @task.errors.full_messages }
-  end
-
   def update_task!
     @task.update_attributes(task_params)
   end
 
   def render_422
     render json: errors, status: 422
+  end
+
+  def errors
+    { errors: @task.errors.full_messages }
   end
 end
