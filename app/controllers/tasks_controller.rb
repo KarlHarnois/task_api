@@ -1,8 +1,8 @@
 class TasksController < ApplicationController
   def create
     @task = Task.create(task_params)
-    render json: @task, status: 201 and return if @task.save
-    render_422
+    render_422 and return unless @task.save
+    render json: @task, status: 201
   end
 
   def index
@@ -11,8 +11,8 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find(params[:id])
-    render json: @task and return if update_task!
-    render_422
+    render_422 and return unless update_task!
+    render json: @task
   end
 
   private
