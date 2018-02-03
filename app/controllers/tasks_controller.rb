@@ -1,7 +1,6 @@
 class TasksController < ApplicationController
   def create
-    @task = Task.create(task_params)
-    render_422 and return unless @task.save
+    render_422 and return unless create_task!
     render json: @task, status: 201
   end
 
@@ -19,6 +18,11 @@ class TasksController < ApplicationController
 
   def task_params
     params.permit(:name)
+  end
+
+  def create_task!
+    @task = Task.create(task_params)
+    @task.save
   end
 
   def update_task!
