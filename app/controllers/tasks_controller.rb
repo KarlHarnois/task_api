@@ -15,10 +15,6 @@ class TasksController < ApplicationController
 
   private
 
-  def task_params
-    params.permit(:name)
-  end
-
   def create_task!
     @task = Task.create(task_params)
     @task.save
@@ -26,6 +22,10 @@ class TasksController < ApplicationController
 
   def update_task!
     task.update_attributes(task_params)
+  end
+
+  def task_params
+    params.permit(:name)
   end
 
   def task
