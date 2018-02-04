@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :render_404
+
   def create
     render_422 and return unless create_task!
     render json: task, status: 201
@@ -11,15 +13,11 @@ class TasksController < ApplicationController
   def update
     render_422 and return unless update_task!
     render json: task
-  rescue ActiveRecord::RecordNotFound => error
-    render_404 error
   end
 
   def destroy
     task.destroy
     render status: 204
-  rescue ActiveRecord::RecordNotFound => error
-    render_404 error
   end
 
   private
