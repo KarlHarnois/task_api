@@ -77,4 +77,32 @@ describe 'Tasks API', type: :request do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context 'when task exist for id param' do
+      let!(:task) { create :task }
+
+      before { delete '/tasks/1' }
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 204
+      end
+
+      it 'delete the correct task' do
+        expect { task.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    context 'when task does not exist' do
+      before { delete '/tasks/1' }
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 404
+      end
+
+      it 'returns the correct error' do
+        expect(body).to include('error' => "Couldn't find Task with 'id'=1")
+      end
+    end
+  end
 end

@@ -13,6 +13,13 @@ class TasksController < ApplicationController
     render json: task
   end
 
+  def destroy
+    task.destroy
+    render status: 204
+  rescue ActiveRecord::RecordNotFound => error
+    render_404 error
+  end
+
   private
 
   def create_task!
@@ -32,11 +39,11 @@ class TasksController < ApplicationController
     @task ||= Task.find(params[:id])
   end
 
-  def render_422
-    render json: errors, status: 422
+  def render_404(error)
+    render json: { error: error.message }, status: :not_found
   end
 
-  def errors
-    { errors: @task.errors.full_messages }
+  def render_422
+    render json: { errors: @task.errors.full_messages }, status: 422
   end
 end
