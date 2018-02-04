@@ -4,7 +4,7 @@ describe 'Tasks API', type: :request do
   let(:body) { JSON.parse(response.body) }
   let(:params) { { name: 'SomeName' } }
 
-  describe 'POST #create' do
+  describe 'POST /tasks' do
     before { post '/tasks', params: params }
 
     it 'creates a new task' do
@@ -32,7 +32,7 @@ describe 'Tasks API', type: :request do
     end
   end
 
-  describe 'GET #index' do
+  describe 'GET /tasks' do
     let!(:tasks) { create_list :task, 3 }
 
     before { get '/tasks' }
@@ -48,7 +48,7 @@ describe 'Tasks API', type: :request do
     end
   end
 
-  describe 'PATCH #update' do
+  describe 'PATCH /tasks/:id' do
     let(:update) { patch '/tasks/1', params: params }
 
     context 'when the task update succeed' do
@@ -97,7 +97,7 @@ describe 'Tasks API', type: :request do
     end
   end
 
-  describe 'DELETE #destroy' do
+  describe 'DELETE /tasks/:id' do
     context 'when task exist for id param' do
       let!(:task) { create :task }
 
