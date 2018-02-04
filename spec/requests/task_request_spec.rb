@@ -4,7 +4,7 @@ describe 'Tasks API', type: :request do
   let(:body) { JSON.parse(response.body) }
   let(:params) { { name: 'SomeName' } }
 
-  describe 'POST #create' do
+  describe 'POST /tasks' do
     before { post '/tasks', params: params }
 
     it 'creates a new task' do
@@ -32,7 +32,7 @@ describe 'Tasks API', type: :request do
     end
   end
 
-  describe 'GET #index' do
+  describe 'GET /tasks' do
     let!(:tasks) { create_list :task, 3 }
 
     before { get '/tasks' }
@@ -48,25 +48,32 @@ describe 'Tasks API', type: :request do
     end
   end
 
-  describe 'PATCH #update' do
-    let!(:task) { create :task }
+  describe 'PATCH /tasks/:id' do
+    let(:update) { patch '/tasks/1', params: params }
 
-    before { patch '/tasks/1', params: params }
+    context 'when the task update succeed' do
+      let!(:task) { create :task }
 
-    it 'can update task names' do
-      expect(task.reload.name).to eq 'SomeName'
-    end
+      before { update }
 
-    it 'returns the updated task' do
-      expect(body).to include('name' => 'SomeName')
-    end
+      it 'can update task names' do
+        expect(task.reload.name).to eq 'SomeName'
+      end
 
-    it 'returns the correct status code' do
-      expect(response).to have_http_status 200
+      it 'returns the updated task' do
+        expect(body).to include('name' => 'SomeName')
+      end
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 200
+      end
     end
 
     context 'when the task update fails' do
+      let!(:task) { create :task }
       let(:params) { { name: nil } }
+
+      before { update }
 
       it 'returns an error' do
         expect(body).to include('errors' => ["Name can't be blank"])
@@ -74,6 +81,46 @@ describe 'Tasks API', type: :request do
 
       it 'returns the correct status code' do
         expect(response).to have_http_status 422
+      end
+    end
+
+    context 'when task does not exist' do
+      before { update }
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 404
+      end
+
+      it 'returns the correct error' do
+        expect(body).to include('error' => "Couldn't find Task with 'id'=1")
+      end
+    end
+  end
+
+  describe 'DELETE /tasks/:id' do
+    context 'when task exist for id param' do
+      let!(:task) { create :task }
+
+      before { delete '/tasks/1' }
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 204
+      end
+
+      it 'delete the correct task' do
+        expect { task.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    context 'when task does not exist' do
+      before { delete '/tasks/1' }
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 404
+      end
+
+      it 'returns the correct error' do
+        expect(body).to include('error' => "Couldn't find Task with 'id'=1")
       end
     end
   end
