@@ -49,24 +49,31 @@ describe 'Tasks API', type: :request do
   end
 
   describe 'PATCH #update' do
-    let!(:task) { create :task }
+    let(:update) { patch '/tasks/1', params: params }
 
-    before { patch '/tasks/1', params: params }
+    context 'when the task update succeed' do
+      let!(:task) { create :task }
 
-    it 'can update task names' do
-      expect(task.reload.name).to eq 'SomeName'
-    end
+      before { update }
 
-    it 'returns the updated task' do
-      expect(body).to include('name' => 'SomeName')
-    end
+      it 'can update task names' do
+        expect(task.reload.name).to eq 'SomeName'
+      end
 
-    it 'returns the correct status code' do
-      expect(response).to have_http_status 200
+      it 'returns the updated task' do
+        expect(body).to include('name' => 'SomeName')
+      end
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 200
+      end
     end
 
     context 'when the task update fails' do
+      let!(:task) { create :task }
       let(:params) { { name: nil } }
+
+      before { update }
 
       it 'returns an error' do
         expect(body).to include('errors' => ["Name can't be blank"])
@@ -74,6 +81,18 @@ describe 'Tasks API', type: :request do
 
       it 'returns the correct status code' do
         expect(response).to have_http_status 422
+      end
+    end
+
+    context 'when task does not exist' do
+      before { update }
+
+      it 'returns the correct status code' do
+        expect(response).to have_http_status 404
+      end
+
+      it 'returns the correct error' do
+        expect(body).to include('error' => "Couldn't find Task with 'id'=1")
       end
     end
   end
