@@ -8,6 +8,10 @@ describe 'Tasks API', type: :request do
     { 'error' => { 'message' => "Couldn't find Task with 'id'=1" } }
   end
 
+  let(:missing_name_error) do
+    { 'error' => { 'message' => "Name can't be blank" } }
+  end
+
   describe 'POST /tasks' do
     before { post '/tasks', params: params }
 
@@ -27,7 +31,7 @@ describe 'Tasks API', type: :request do
       let(:params) { { name: nil } }
 
       it 'returns an error' do
-        expect(body).to include('errors' => ["Name can't be blank"])
+        expect(body).to include missing_name_error
       end
 
       it 'returns the correct status code' do
@@ -80,7 +84,7 @@ describe 'Tasks API', type: :request do
       before { update }
 
       it 'returns an error' do
-        expect(body).to include('errors' => ["Name can't be blank"])
+        expect(body).to include missing_name_error
       end
 
       it 'returns the correct status code' do

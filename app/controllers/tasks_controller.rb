@@ -44,6 +44,6 @@ class TasksController < ApplicationController
   end
 
   def render_422
-    render json: { errors: @task.errors.full_messages }, status: 422
+    render json: { error: { message: @task.errors.full_messages.first } }, status: 422
   end
 end
