@@ -40,7 +40,7 @@ class TasksController < ApplicationController
   end
 
   def render_404(error)
-    render json: { error: error.message }, status: :not_found
+    render json: { error: { message: error.message } }, status: :not_found
   end
 
   def render_422

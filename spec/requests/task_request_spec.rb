@@ -4,6 +4,10 @@ describe 'Tasks API', type: :request do
   let(:body) { JSON.parse(response.body) }
   let(:params) { { name: 'SomeName' } }
 
+  let(:not_found_error) do
+    { 'error' => { 'message' => "Couldn't find Task with 'id'=1" } }
+  end
+
   describe 'POST /tasks' do
     before { post '/tasks', params: params }
 
@@ -92,7 +96,7 @@ describe 'Tasks API', type: :request do
       end
 
       it 'returns the correct error' do
-        expect(body).to include('error' => "Couldn't find Task with 'id'=1")
+        expect(body).to include not_found_error
       end
     end
   end
@@ -120,7 +124,7 @@ describe 'Tasks API', type: :request do
       end
 
       it 'returns the correct error' do
-        expect(body).to include('error' => "Couldn't find Task with 'id'=1")
+        expect(body).to include not_found_error
       end
     end
   end
