@@ -1,4 +1,9 @@
 class ApplicationController < ActionController::API
+  include ActionController::HttpAuthentication::Basic::ControllerMethods
+
+  http_basic_authenticate_with name: Rails.application.secrets.auth_username,
+                               password: Rails.application.secrets.auth_password
+
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
 
   def render_404(error)

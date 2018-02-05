@@ -4,6 +4,10 @@ describe 'Tasks API', type: :request do
   let(:body) { JSON.parse(response.body) }
   let(:params) { { name: 'SomeName' } }
 
+  let(:headers) do
+    { 'Authorization' => "Basic #{Base64.strict_encode64('SomeName:SomePassword')}" }
+  end
+
   let(:not_found_error) do
     { 'error' => { 'message' => "Couldn't find Task with 'id'=1" } }
   end
@@ -13,7 +17,7 @@ describe 'Tasks API', type: :request do
   end
 
   describe 'POST /tasks' do
-    before { post '/tasks', params: params }
+    before { post '/tasks', headers: headers, params: params }
 
     it 'creates a new task' do
       expect(Task.last.name).to eq 'SomeName'
@@ -43,7 +47,7 @@ describe 'Tasks API', type: :request do
   describe 'GET /tasks' do
     let!(:tasks) { create_list :task, 3 }
 
-    before { get '/tasks' }
+    before { get '/tasks', headers: headers }
 
     describe 'response body' do
       it 'contains the correct amount of objects' do
@@ -57,12 +61,12 @@ describe 'Tasks API', type: :request do
   end
 
   describe 'PATCH /tasks/:id' do
-    let(:update) { patch '/tasks/1', params: params }
+    let(:patch_task) { patch '/tasks/1', headers: headers, params: params }
 
     context 'when the task update succeed' do
       let!(:task) { create :task }
 
-      before { update }
+      before { patch_task }
 
       it 'can update task names' do
         expect(task.reload.name).to eq 'SomeName'
@@ -81,7 +85,7 @@ describe 'Tasks API', type: :request do
       let!(:task) { create :task }
       let(:params) { { name: nil } }
 
-      before { update }
+      before { patch_task }
 
       it 'returns an error' do
         expect(body).to include missing_name_error
@@ -93,7 +97,7 @@ describe 'Tasks API', type: :request do
     end
 
     context 'when task does not exist' do
-      before { update }
+      before { patch_task }
 
       it 'returns the correct status code' do
         expect(response).to have_http_status 404
@@ -106,10 +110,12 @@ describe 'Tasks API', type: :request do
   end
 
   describe 'DELETE /tasks/:id' do
+    let(:delete_task) { delete '/tasks/1', headers: headers }
+
     context 'when task exist for id param' do
       let!(:task) { create :task }
 
-      before { delete '/tasks/1' }
+      before { delete_task }
 
       it 'returns the correct status code' do
         expect(response).to have_http_status 204
@@ -121,7 +127,7 @@ describe 'Tasks API', type: :request do
     end
 
     context 'when task does not exist' do
-      before { delete '/tasks/1' }
+      before { delete_task }
 
       it 'returns the correct status code' do
         expect(response).to have_http_status 404
