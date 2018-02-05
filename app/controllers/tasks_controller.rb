@@ -1,8 +1,6 @@
 class TasksController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404
-
   def create
-    render_422 and return unless create_task!
+    render_422(task) and return unless create_task!
     render json: task, status: 201
   end
 
@@ -11,7 +9,7 @@ class TasksController < ApplicationController
   end
 
   def update
-    render_422 and return unless update_task!
+    render_422(task) and return unless update_task!
     render json: task
   end
 
@@ -37,13 +35,5 @@ class TasksController < ApplicationController
 
   def task
     @task ||= Task.find(params[:id])
-  end
-
-  def render_404(error)
-    render json: { error: { message: error.message } }, status: :not_found
-  end
-
-  def render_422
-    render json: { error: { message: @task.errors.full_messages.first } }, status: 422
   end
 end
