@@ -7,16 +7,12 @@ end
 
 gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.4'
-
-group :production do
-  gem 'pg', '~> 1.0.0'
-end
+gem 'pg', '0.18'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails', '~> 4.0'
   gem 'rspec-rails', '~> 3.7'
-  gem 'sqlite3'
 end
 
 group :development do
