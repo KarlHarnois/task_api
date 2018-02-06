@@ -3,6 +3,12 @@ language: ruby
 rvm:
   - 2.4
 
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database task_api_test;' -U postgres
+
 stages:
   - lint
   - test
