@@ -5,6 +5,6 @@ class ApplicationController < ActionController::API
                                password: Rails.application.secrets.auth_password
 
   def render_422(record)
-    render json: { error: { message: record.errors.full_messages.first } }, status: 422
+    render json: { error: record.errors.full_messages.join(', ') }, status: 422
   end
 end

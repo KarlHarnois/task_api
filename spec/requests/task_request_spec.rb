@@ -9,7 +9,7 @@ describe 'Tasks API', type: :request do
   end
 
   let(:missing_name_error) do
-    { 'error' => { 'message' => "Name can't be blank" } }
+    { 'error' => "Name can't be blank" }
   end
 
   describe 'POST /tasks' do
