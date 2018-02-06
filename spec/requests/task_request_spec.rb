@@ -20,7 +20,7 @@ describe 'Tasks API', type: :request do
     end
 
     it 'returns the created task' do
-      expect(body).to include('name' => 'SomeName', 'id' => 1)
+      expect(body).to include('name' => 'SomeName', 'id' => Task.last.id)
     end
 
     it 'returns the correct status code' do
@@ -60,7 +60,7 @@ describe 'Tasks API', type: :request do
     let(:patch_task) { patch '/tasks/1', headers: headers, params: params }
 
     context 'when the task update succeed' do
-      let!(:task) { create :task }
+      let!(:task) { create :task, id: 1 }
 
       before { patch_task }
 
@@ -78,7 +78,7 @@ describe 'Tasks API', type: :request do
     end
 
     context 'when the task update fails' do
-      let!(:task) { create :task }
+      let!(:task) { create :task, id: 1 }
       let(:params) { { name: nil } }
 
       before { patch_task }
@@ -97,7 +97,7 @@ describe 'Tasks API', type: :request do
     let(:delete_task) { delete '/tasks/1', headers: headers }
 
     context 'when task exist for id param' do
-      let!(:task) { create :task }
+      let!(:task) { create :task, id: 1 }
 
       before { delete_task }
 
