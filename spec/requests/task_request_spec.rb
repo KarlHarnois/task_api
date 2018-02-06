@@ -8,10 +8,6 @@ describe 'Tasks API', type: :request do
     { 'Authorization' => "Basic #{Base64.strict_encode64('SomeName:SomePassword')}" }
   end
 
-  let(:not_found_error) do
-    { 'error' => { 'message' => "Couldn't find Task with 'id'=1" } }
-  end
-
   let(:missing_name_error) do
     { 'error' => { 'message' => "Name can't be blank" } }
   end
@@ -95,18 +91,6 @@ describe 'Tasks API', type: :request do
         expect(response).to have_http_status 422
       end
     end
-
-    context 'when task does not exist' do
-      before { patch_task }
-
-      it 'returns the correct status code' do
-        expect(response).to have_http_status 404
-      end
-
-      it 'returns the correct error' do
-        expect(body).to include not_found_error
-      end
-    end
   end
 
   describe 'DELETE /tasks/:id' do
@@ -123,18 +107,6 @@ describe 'Tasks API', type: :request do
 
       it 'delete the correct task' do
         expect { task.reload }.to raise_error ActiveRecord::RecordNotFound
-      end
-    end
-
-    context 'when task does not exist' do
-      before { delete_task }
-
-      it 'returns the correct status code' do
-        expect(response).to have_http_status 404
-      end
-
-      it 'returns the correct error' do
-        expect(body).to include not_found_error
       end
     end
   end
