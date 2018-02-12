@@ -2,7 +2,13 @@ require 'rails_helper'
 
 describe 'Tasks API', type: :request do
   let(:body) { JSON.parse(response.body) }
-  let(:params) { { name: 'SomeName' } }
+
+  let(:params) do
+    {
+      name: 'SomeName',
+      completed_at: '19 August 1993'
+    }
+  end
 
   let(:headers) do
     { 'Authorization' => "Basic #{Base64.strict_encode64('SomeName:SomePassword')}" }
@@ -62,10 +68,14 @@ describe 'Tasks API', type: :request do
     context 'when the task update succeed' do
       let!(:task) { create :task, id: 1 }
 
+      let(:expected_attributes) do
+        { name: 'SomeName', completed_at: '1993-08-19'.to_datetime }
+      end
+
       before { patch_task }
 
-      it 'can update task names' do
-        expect(task.reload.name).to eq 'SomeName'
+      it "can update the task's attributes" do
+        expect(task.reload).to have_attributes(expected_attributes)
       end
 
       it 'returns the updated task' do
