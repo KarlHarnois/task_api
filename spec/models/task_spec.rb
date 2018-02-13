@@ -5,6 +5,10 @@ describe Task, type: :model do
     expect(FactoryBot.create(:task)).to be_valid
   end
 
+  it 'has a completion date' do
+    expect(Task.column_names).to include 'completed_at'
+  end
+
   describe '#save' do
     context 'when task name is nil' do
       before { subject.name = nil }
