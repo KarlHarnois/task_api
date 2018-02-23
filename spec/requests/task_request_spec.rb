@@ -61,8 +61,8 @@ describe 'Tasks API', type: :request do
   end
 
   describe 'GET /tasks?state' do
-    let!(:completed_tasks) { create_list :task, 2, completed_at: Time.now }
-    let!(:open_task) { create :task }
+    let!(:completed_tasks) { create_list :completed_task, 2 }
+    let!(:open_task) { create :open_task }
     let(:received_ids) { body.map { |t| t['id'] } }
 
     context 'when getting completed tasks' do

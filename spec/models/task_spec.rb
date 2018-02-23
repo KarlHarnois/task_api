@@ -10,8 +10,8 @@ describe Task, type: :model do
   end
 
   describe '.completed' do
-    let!(:completed_tasks) { create_list :task, 2, completed_at: Time.now }
-    let!(:open_tasks) { create :task }
+    let!(:completed_tasks) { create_list :completed_task, 2 }
+    let!(:open_tasks) { create :open_task }
 
     it 'returns only the tasks with a completion date' do
       expect(Task.completed).to eq completed_tasks
@@ -19,8 +19,8 @@ describe Task, type: :model do
   end
 
   describe '.open' do
-    let!(:open_tasks) { create_list :task, 2 }
-    let!(:completed_tasks) { create :task, completed_at: Time.now }
+    let!(:open_tasks) { create_list :open_task, 2 }
+    let!(:completed_tasks) { create :completed_task }
 
     it 'returns only the tasks with no completion date' do
       expect(Task.open).to eq open_tasks
