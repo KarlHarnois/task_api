@@ -63,12 +63,21 @@ describe 'Tasks API', type: :request do
   describe 'GET /tasks?state' do
     let!(:completed_tasks) { create_list :task, 2, completed_at: Time.now }
     let!(:open_task) { create :task }
+    let(:received_ids) { body.map { |t| t['id'] } }
 
     context 'when getting completed tasks' do
       before { get '/tasks?state=completed', headers: headers }
 
       it 'returns the correct tasks' do
-        expect(body.map { |t| t['id'] }).to eq completed_tasks.map(&:id)
+        expect(received_ids).to eq completed_tasks.map(&:id)
+      end
+    end
+
+    context 'when getting open tasks' do
+      before { get '/tasks?state=open', headers: headers }
+
+      it 'returns the correct tasks' do
+        expect(received_ids).to eq [open_task.id]
       end
     end
   end

@@ -10,11 +10,20 @@ describe Task, type: :model do
   end
 
   describe '.completed' do
-    let(:completed_tasks) { create_list :task, 2, completed_at: Time.now }
-    let(:open_tasks) { create :task }
+    let!(:completed_tasks) { create_list :task, 2, completed_at: Time.now }
+    let!(:open_tasks) { create :task }
 
-    it 'only returns the tasks with a completion date' do
+    it 'returns only the tasks with a completion date' do
       expect(Task.completed).to eq completed_tasks
+    end
+  end
+
+  describe '.open' do
+    let!(:open_tasks) { create_list :task, 2 }
+    let!(:completed_tasks) { create :task, completed_at: Time.now }
+
+    it 'returns only the tasks with no completion date' do
+      expect(Task.open).to eq open_tasks
     end
   end
 

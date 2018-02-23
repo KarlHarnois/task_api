@@ -6,6 +6,7 @@ class TasksController < ApplicationController
 
   def index
     render json: Task.completed and return if params[:state] == 'completed'
+    render json: Task.open and return if params[:state] == 'open'
     render json: Task.all
   end
 
