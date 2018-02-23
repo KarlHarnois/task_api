@@ -9,6 +9,15 @@ describe Task, type: :model do
     expect(Task.column_names).to include 'completed_at'
   end
 
+  describe '.completed' do
+    let(:completed_tasks) { create_list :task, 2, completed_at: Time.now }
+    let(:open_tasks) { create :task }
+
+    it 'only returns the tasks with a completion date' do
+      expect(Task.completed).to eq completed_tasks
+    end
+  end
+
   describe '#save' do
     context 'when task name is nil' do
       before { subject.name = nil }

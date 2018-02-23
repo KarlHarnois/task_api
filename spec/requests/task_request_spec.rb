@@ -51,13 +51,24 @@ describe 'Tasks API', type: :request do
 
     before { get '/tasks', headers: headers }
 
-    describe 'response body' do
-      it 'contains the correct amount of objects' do
-        expect(body.size).to eq 3
-      end
+    it 'returns the correct amount of objects' do
+      expect(body.size).to eq tasks.count
+    end
 
-      it 'contains tasks' do
-        expect(body).to all(include('name', 'id', 'created_at', 'updated_at'))
+    it 'returns tasks' do
+      expect(body).to all(include('name', 'id', 'created_at', 'updated_at'))
+    end
+  end
+
+  describe 'GET /tasks?state' do
+    let!(:completed_tasks) { create_list :task, 2, completed_at: Time.now }
+    let!(:open_task) { create :task }
+
+    context 'when getting completed tasks' do
+      before { get '/tasks?state=completed', headers: headers }
+
+      it 'returns the correct tasks' do
+        expect(body.map { |t| t['id'] }).to eq completed_tasks.map(&:id)
       end
     end
   end
