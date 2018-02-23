@@ -9,21 +9,20 @@ describe Task, type: :model do
     expect(Task.column_names).to include 'completed_at'
   end
 
-  describe '.completed' do
+  describe 'state scopes' do
     let!(:completed_tasks) { create_list :completed_task, 2 }
-    let!(:open_tasks) { create :open_task }
+    let!(:open_tasks)      { create_list :open_task, 2 }
 
-    it 'returns only the tasks with a completion date' do
-      expect(Task.completed).to eq completed_tasks
+    describe '.completed' do
+      it 'returns only the tasks with a completion date' do
+        expect(Task.completed).to eq completed_tasks
+      end
     end
-  end
 
-  describe '.open' do
-    let!(:open_tasks) { create_list :open_task, 2 }
-    let!(:completed_tasks) { create :completed_task }
-
-    it 'returns only the tasks with no completion date' do
-      expect(Task.open).to eq open_tasks
+    describe '.open' do
+      it 'returns only the tasks with no completion date' do
+        expect(Task.open).to eq open_tasks
+      end
     end
   end
 
