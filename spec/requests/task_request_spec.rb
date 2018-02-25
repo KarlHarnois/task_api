@@ -5,8 +5,10 @@ describe 'Tasks API', type: :request do
 
   let(:params) do
     {
-      name: 'SomeName',
-      completed_at: '19 August 1993'
+      task: {
+        name: 'SomeName',
+        completed_at: '19 August 1993'
+      }
     }
   end
 
@@ -34,7 +36,7 @@ describe 'Tasks API', type: :request do
     end
 
     context 'when task creation fails' do
-      let(:params) { { name: nil } }
+      let(:params) { { task: { name: nil } } }
 
       it 'returns an error' do
         expect(body).to include missing_name_error
@@ -109,7 +111,7 @@ describe 'Tasks API', type: :request do
 
     context 'when the task update fails' do
       let!(:task) { create :task, id: 1 }
-      let(:params) { { name: nil } }
+      let(:params) { { task: { name: nil } } }
 
       before { patch_task }
 
